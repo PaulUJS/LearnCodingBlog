@@ -3,7 +3,7 @@ const res = require('express/lib/response')
 const { send, sendStatus } = require('express/lib/response')
 const mysql = require('mysql2')
 const { error } = require("console")
-const { totalmem } = require('os')
+const { totalmem, devNull } = require('os')
 const bcrypt = require('bcrypt')
 require('dotenv').config()
 
@@ -106,14 +106,44 @@ app.get('/', (req,res) => {
 
 // Lets me sign up, will be deleted later
 app.get('/signup', (req,res) => {
+    res.render('signup')
+})
+
+app.post('/signup', async (req,res) => {
     const email = req.body.email
+    const saltRounds = 10;
+    const hashedPass = await bcrypt.hash(req.body.password, saltRounds);
+
+    const select_query = "SELECT FROM user where email = ?"
+    const sql_select = mysql.format(select_query, [email])
+
+    const insert_query = "INSERT INTO user VALUES (0,?,?)";
+    const sql_insert = mysql.format(insert_query, [email, hashedPass]);
+
+    db.query(sql_select, (err, result) => {
+        if (err) throw err;
+
+        if (result.length != 0) {
+
+        }
+        else {
+            db.query(sql_insert, (err, result) => {
+                if (err) throw err;
+                console.log('user created')
+            })
+        }
+
+    })
 })
 
 // Lets me sign in to make, edit, and delete posts
 app.get('login', (req,res) => {
-
+    res.render('login')
 })
 
+app.post('login', (req,res) => {
+    pass
+})
 // Creates post and pushes it to main page
 app.post('/create', (req,res) => {
     let title = req.body.title
