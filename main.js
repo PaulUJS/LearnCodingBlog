@@ -3,8 +3,18 @@ const res = require('express/lib/response')
 const { send, sendStatus } = require('express/lib/response')
 const mysql = require('mysql2')
 const { error } = require("console")
+const { totalmem } = require('os')
 require('dotenv').config()
 
+//
+// Varibles
+//
+let posts = [];
+let current_post = [];
+
+//
+// App setup
+//
 // Creates the db connection
 const db = mysql.createConnection({
     host: process.env.HOST,
@@ -56,25 +66,36 @@ app.get('/createtable', (req,res) => {
     })
 })
 
-// Gets post at specified ID
-function getPost() {
+// Grabs all posts from database
+function allPosts() {
+    const select_query = "SELECT FROM TABLE posts TITLE, CONTENT"
+    const sql_select = mysql.format(select_query)
+    
+    // Query for grabbing all posts
+    db.query(sql_select, (err, result) => {
+        if (err) throw err;
+        console.log(result.length)
 
-}
+        // Loops through the posts from db
+        for (let x = 0; x > result.length; x++) {
+            let title = result[x].title;
+            let content = result[x].content;
 
-// Deletes post at specified ID
-function deletePost() {
-
-}
-
-// Edits post at specified ID
-function editPost() {
-
+            // Pushes posts into an array as an object which will be rendered in html
+            posts.push({
+                title: title,
+                content: content
+            })
+            console.log(posts)
+        }
+    })
 }
 
 // Renders the landing page
 app.get('/', (req,res) => {
     try {
         res.render('index')
+        console.log('index rendered')
     }
     catch {
         console.log('error caught')
@@ -82,29 +103,78 @@ app.get('/', (req,res) => {
     }
 })
 
-// Renders post at specified ID
-app.get('/:id', (req,res) => {
+// Grabs post at secified ID then pushes it into the current post array
+app.get('/post/:id', (req,res) => {
+    // Grabs ID parameter from the url
+    let id = req.params['id']
+    // Gets index of that post based off its ID
+    let index = id - 1
+    // Pushes that post object into the current post array
+    current_post.push(posts[index])
+    res.redirect(`/post/${id}`)
+})
 
+// Renders the post that was grabbed in the previous get request
+app.get('/post/:id', (req,res) => {
+    res.render('post', {current_post: current_post})
 })
 
 // Deletes post at specified ID
 app.get('/delete/:id', (req,res) => {
-    deletePost()  
+    let id = req.params['id']
+    let index = id - 1
+
+    let del_query = "DELETE * FROM TABLE posts WHERE id = ?"
+    let sql_del = mysql.format(del_query, [id])
+
+    // Deletes post from the db
+    db.query(sql_del, (err, result) => {
+        if (err) throw err;
+        console.log(`Post ${id} deleted from database`)
+    })
+    
+    // Deletes post from the posts array
+    posts.splice(index, 1)
+    console.log(`Post ${id} deleted from the array`)
+
+    res.redirect('/')
 })
 
-// Edits post at specified ID
+// Renders page where you can edit the post
 app.get('/edit/:id', (req,res) => {
-    editPost()
+    res.render('edit', {current_post: current_post})
+})
+
+// Posts the edit to the post
+app.post('/edit/:id', (req,res) => {
+    let id = req.params['id']
+    let title = req.body.title
+    let content = req.body.content
+    let index = id - 1
+
+    // Grabs the object from the array at index
+    let change = posts[id]
+    // Changes the title and content to the edited version
+    change['title'] = title
+    change['content'] = content
+    
+    res.redirect('/')
+})
+
+// Renders the page where the user creates posts
+app.get('/create', (req,res) => {
+    res.render('create')
 })
 
 // Creates post and pushes it to main page
-app.get('/create', (req,res) => {
+app.post('/create', (req,res) => {
     let title = req.body.title
     let content = req.body.content 
 
     const insert_query = "INSERT INTO posts title = ?, content = ?"
     const sql_insert = mysql.format(insert_query, [title], [content])
 
+    // Inserts the created post into the database
     db.query(sql_insert, (err, result) => {
         if (err) throw err;
         console.log(result)
