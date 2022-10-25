@@ -34,26 +34,9 @@ app.use(express.urlencoded({ extended: true }));
 // View engine for rendering dynamic html pages
 app.set('view engine', 'ejs')
 
-
 //
 // Main routes and functions
-
-// Creates posts table in database
-app.get('/createtable', (req,res) => {
-    let table = `create table if not exists posts(
-        id int primary key auto_increment,
-        title varchar(255) not null,
-        content varchar(255) not null 
-    )`
-
-    let table_form = mysql.format(table)
-
-    db.query(table, (err, res) => {
-        if (err) throw err;
-        console.log('table created')
-
-    })
-})
+//
 
 // Gets post at specified ID
 function getPost() {
@@ -78,7 +61,7 @@ function editPost() {
 // Renders the landing page
 app.get('/', (req,res) => {
     try {
-        res.render('index')
+        res.render('index.ejs')
     }
     catch {
         console.log('error caught')
