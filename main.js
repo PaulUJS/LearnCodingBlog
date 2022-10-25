@@ -4,6 +4,7 @@ const { send, sendStatus } = require('express/lib/response')
 const mysql = require('mysql2')
 const { error } = require("console")
 const { totalmem } = require('os')
+const bcrypt = require('bcrypt')
 require('dotenv').config()
 
 //
@@ -103,6 +104,39 @@ app.get('/', (req,res) => {
     }
 })
 
+// Lets me sign up, will be deleted later
+app.get('/signup', (req,res) => {
+    const email = req.body.email
+})
+
+// Lets me sign in to make, edit, and delete posts
+app.get('login', (req,res) => {
+
+})
+
+// Creates post and pushes it to main page
+app.post('/create', (req,res) => {
+    let title = req.body.title
+    let content = req.body.content 
+
+    const insert_query = "INSERT INTO posts title = ?, content = ?"
+    const sql_insert = mysql.format(insert_query, [title], [content])
+
+    // Inserts the created post into the database
+    db.query(sql_insert, (err, result) => {
+        if (err) throw err;
+        console.log(result)
+        console.log('Post created')
+    })
+
+    res.redirect('/')
+})
+
+// Renders the page where the user creates posts
+app.get('/create', (req,res) => {
+    res.render('create')
+})
+
 // Grabs post at secified ID then pushes it into the current post array
 app.get('/post/:id', (req,res) => {
     // Grabs ID parameter from the url
@@ -136,6 +170,7 @@ app.get('/delete/:id', (req,res) => {
     // Deletes post from the posts array
     posts.splice(index, 1)
     console.log(`Post ${id} deleted from the array`)
+    current_post = []
 
     res.redirect('/')
 })
@@ -157,39 +192,10 @@ app.post('/edit/:id', (req,res) => {
     // Changes the title and content to the edited version
     change['title'] = title
     change['content'] = content
-    
-    res.redirect('/')
-})
-
-// Renders the page where the user creates posts
-app.get('/create', (req,res) => {
-    res.render('create')
-})
-
-// Creates post and pushes it to main page
-app.post('/create', (req,res) => {
-    let title = req.body.title
-    let content = req.body.content 
-
-    const insert_query = "INSERT INTO posts title = ?, content = ?"
-    const sql_insert = mysql.format(insert_query, [title], [content])
-
-    // Inserts the created post into the database
-    db.query(sql_insert, (err, result) => {
-        if (err) throw err;
-        console.log(result)
-        console.log('Post created')
-    })
+    current_post = []
 
     res.redirect('/')
 })
 
-// Lets me sign up, will be deleted later
-app.get('/signup', (req,res) => {
 
-})
 
-// Lets me sign in to make, edit, and delete posts
-app.get('login', (req,res) => {
-
-})
