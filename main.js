@@ -5,6 +5,8 @@ const mysql = require('mysql2')
 const { error } = require("console")
 const { totalmem, devNull } = require('os')
 const bcrypt = require('bcrypt')
+const session = require("express-session")
+const store = new session.MemoryStore()
 require('dotenv').config()
 
 //
@@ -50,6 +52,16 @@ app.set('view engine', 'ejs')
 // Main routes and functions
 //
 
+app.use(
+    session({
+        secret: "secret",
+        resave: true,
+        saveUninitialized: false,
+        cookie: { maxAge: 30000 },
+        store,
+    })
+);
+
 // Creates posts table in database
 app.get('/createtable', (req,res) => {
     let table = `create table if not exists posts(
@@ -94,13 +106,13 @@ function allPosts() {
 
 // Renders the landing page
 app.get('/', (req,res) => {
-    try {
-        res.render('index')
-        console.log('index rendered')
+    if (req.session.authenticated = false) {
+        res.render('adminindex', {posts: posts})
+        console.log('admin online')
     }
-    catch {
-        console.log('error caught')
-        res.send('There was an error, try again or come back another time.')
+    else if (req.session.authenticated = false) {
+        res.render('index', {posts: posts})
+        console.log('user online')
     }
 })
 
@@ -142,7 +154,30 @@ app.get('login', (req,res) => {
 })
 
 app.post('login', (req,res) => {
-    pass
+    const email = req.body.email
+    const password = req.body.password
+
+    const sql_select = "SELECT * FROM users WHERE email = ?"
+    const select_query = mysql.format(sql_select, [email])
+    const req_var = req
+
+    db.query(select_query, async (err, result) => {
+        if (err) throw err;
+        if (result.length == 0) {
+           console.log('No user')
+        }
+        else {
+            const hashedPass = result[0].password
+
+            if (await bcrypt.compare(password, hashedPass) == true) {
+                req_var.session.authenticated = true
+            }
+
+            else if (await bcrypt.compare(password, hashedPass) == false){
+                req_var.session.authenticated = false;
+            }
+        }
+    })
 })
 // Creates post and pushes it to main page
 app.post('/create', (req,res) => {
