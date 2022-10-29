@@ -63,7 +63,6 @@ app.use(
         resave: true,
         saveUninitialized: false,
         cookie: { maxAge: oneDay },
-        authenticated: false,
         store,
     })
 );
@@ -100,7 +99,7 @@ app.get('/', (req,res) => {
         res.render('adminindex', {posts: posts})
         console.log('admin online')
     }
-    else if (req.session.authenticated == false) {
+    else {
         res.render('index', {posts: posts})
         console.log('user online')
     }
@@ -149,7 +148,7 @@ app.post('login', (req,res) => {
 
     const sql_select = "SELECT * FROM users WHERE email = ?"
     const select_query = mysql.format(sql_select, [email])
-    const req_var = req
+    const session = req.session
 
     db.query(select_query, async (err, result) => {
         if (err) throw err;
@@ -160,11 +159,12 @@ app.post('login', (req,res) => {
             const hashedPass = result[0].password
 
             if (await bcrypt.compare(password, hashedPass) == true) {
-                req_var.session.authenticated = true
+                session.userid = email;
+                session.authenticated = true
             }
 
             else if (await bcrypt.compare(password, hashedPass) == false){
-                req_var.session.authenticated = false;
+                session.authenticated = false
             }
         }
     })
