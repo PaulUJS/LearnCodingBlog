@@ -7,6 +7,7 @@ const { totalmem, devNull } = require('os')
 const bcrypt = require('bcrypt')
 const session = require("express-session")
 const store = new session.MemoryStore()
+const cookieParser = require("cookie-parser");
 require('dotenv').config()
 
 //
@@ -14,6 +15,7 @@ require('dotenv').config()
 //
 let posts = [];
 let current_post = [];
+const oneDay = 1000 * 60 * 60 * 24;
 
 //
 // App setup
@@ -45,6 +47,9 @@ app.listen('3000', () => {
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+// Parses cookies
+app.use(cookieParser());
+
 // View engine for rendering dynamic html pages
 app.set('view engine', 'ejs')
 
@@ -57,9 +62,8 @@ app.use(
         secret: "secret",
         resave: true,
         saveUninitialized: false,
-        cookie: { maxAge: 30000 },
+        cookie: { maxAge: oneDay },
         authenticated: false,
-        user,
         store,
     })
 );
@@ -92,11 +96,11 @@ function allPosts() {
 
 // Renders the landing page
 app.get('/', (req,res) => {
-    if (req.session.authenticated = false) {
+    if (req.session.authenticated == true) {
         res.render('adminindex', {posts: posts})
         console.log('admin online')
     }
-    else if (req.session.authenticated = false) {
+    else if (req.session.authenticated == false) {
         res.render('index', {posts: posts})
         console.log('user online')
     }

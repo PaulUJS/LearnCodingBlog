@@ -8,6 +8,23 @@
     <link rel="stylesheet" href="index.css">
 </head>
 <body>
-    
+    <div class="main">
+        <div class="main-container">
+            <% posts.forEach(element => { %>
+            <div class="posts">
+                <form action="/post" method="GET" type="submit" class="posts-form">
+                    <div class="title">
+                    <p name="id">Blog <%= element.id %></p>
+                    <p name="title"><%= element.title %></p>
+                    </div>
+                    <div class="content">
+                    <p name="content"> <%= element.content %></p>
+                    </div>
+                </form>
+            </div>
+            <% }) %>
+        </div>
+    </div>
+    <script src="main.js" type="script/javascript"></script>
 </body>
 </html>

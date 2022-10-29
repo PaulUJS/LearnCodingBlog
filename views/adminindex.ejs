@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LearnCodingBlogAdmin</title>
+    <link rel="stylesheet" href="index.css">
+</head>
+<body>
+    <div class="nav">
+        <div class="nav-container">
+            <div class="create">
+                <a href="">
+                    <button name="create-post">Create Post</button>
+                </a>
+            </div>
+        </div>
+    </div>
+    <hr>
+
+    <div class="main">
+        <div class="main-container">
+            <% posts.forEach(element => { %>
+            <div class="posts">
+                <form action="/post" method="GET" type="submit" class="posts-form">
+                    <div class="title">
+                    <p name="id-p">Blog <%= element.id %></p>
+                    <p name="title-p"><%= element.title %></p>
+                    </div>
+                    <div class="content">
+                    <p name="content-p"> <%= element.content %></p>
+                    </div>
+                </form>
+            </div>
+            <% }) %>
+        </div>
+    </div>
+    <script src="main.js" type="script/javascript"></script>
+</body>
+</html>
