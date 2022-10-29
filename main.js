@@ -111,9 +111,13 @@ app.get('/signup', (req,res) => {
 })
 
 app.post('/signup', async (req,res) => {
+    console.log('posting signup')
+
     const email = req.body.email
+    const password = req.body.password
+    
     const saltRounds = 10;
-    const hashedPass = await bcrypt.hash(req.body.password, saltRounds);
+    const hashedPass = await bcrypt.hash(password, saltRounds);
 
     const select_query = "SELECT FROM user where email = ?"
     const sql_select = mysql.format(select_query, [email])
@@ -125,7 +129,7 @@ app.post('/signup', async (req,res) => {
         if (err) throw err;
 
         if (result.length != 0) {
-
+            console.log('no user')
         }
         else {
             db.query(sql_insert, (err, result) => {
@@ -135,6 +139,7 @@ app.post('/signup', async (req,res) => {
         }
 
     })
+    res.redirect('/')
 })
 
 // Lets me sign in to make, edit, and delete posts
