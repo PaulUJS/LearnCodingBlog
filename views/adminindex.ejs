@@ -11,9 +11,14 @@
     <div class="nav">
         <div class="nav-container">
             <div class="create">
-                <a href="">
-                    <button name="create-post">Create Post</button>
-                </a>
+                <form action="/create" method="GET" class="create-form">
+                    <button name="create-btn">Create Post</button>
+                </form>
+            </div>
+            <div class="log-out">
+                <form action="/logout" method="GET" class="logout-form">
+                    <button class="logout-btn">Log out</button>
+                </form>
             </div>
         </div>
     </div>

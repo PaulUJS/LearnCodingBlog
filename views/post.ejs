@@ -5,6 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Blog Post</title>
+    <link rel="stylesheet" href="/public/post.css">
 </head>
 <body>
     <div class="main">
@@ -20,14 +21,6 @@
                         <div class="content">
                         <p name="content"> <%= element.content %></p>
                         </div>
-                    </div>
-                    <div class="change">
-                        <form action="/edit/<%= element.id %>" class="edit-form">
-                            <button class="edit">Edit</button>
-                        </form>
-                        <form action="/delete/<%= element.id %>" class="delete-form">
-                            <button class="delete">Delete</button>
-                        </form>
                     </div>
                     <% }) %>
                 </div>

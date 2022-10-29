@@ -169,6 +169,14 @@ app.post('login', (req,res) => {
         }
     })
 })
+
+// Logs user out
+app.get('/logout', (req,res) => {
+    req.session.destroy()
+    console.log('User logged out')
+    res.redirect('/')
+})
+
 // Creates post and pushes it to main page
 app.post('/create', (req,res) => {
     let title = req.body.title
