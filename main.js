@@ -58,26 +58,12 @@ app.use(
         resave: true,
         saveUninitialized: false,
         cookie: { maxAge: 30000 },
+        authenticated: false,
+        user,
         store,
     })
 );
 
-// Creates posts table in database
-app.get('/createtable', (req,res) => {
-    let table = `create table if not exists posts(
-        id int primary key auto_increment,
-        title text not null,
-        content text not null 
-    )`
-
-    let table_form = mysql.format(table)
-
-    db.query(table, (err, res) => {
-        if (err) throw err;
-        console.log('table created')
-
-    })
-})
 
 // Grabs all posts from database
 function allPosts() {
@@ -199,13 +185,20 @@ app.post('/create', (req,res) => {
 
 // Renders the page where the user creates posts
 app.get('/create', (req,res) => {
-    res.render('create')
+    if (req.session.authenticated == true) {
+        console.log('admin online')
+        res.render('create')
+    }
+    else if (req.session.authenticated == false) {
+        console.log('not admin')
+        res.redirect('/')
+    }
 })
 
 // Grabs post at secified ID then pushes it into the current post array
-app.get('/post/:id', (req,res) => {
+app.get('/post', (req,res) => {
     // Grabs ID parameter from the url
-    let id = req.params['id']
+    let id = req.body.id
     // Gets index of that post based off its ID
     let index = id - 1
     // Pushes that post object into the current post array
@@ -215,34 +208,55 @@ app.get('/post/:id', (req,res) => {
 
 // Renders the post that was grabbed in the previous get request
 app.get('/post/:id', (req,res) => {
-    res.render('post', {current_post: current_post})
+    if (req.session.authenticated == true) {
+        console.log('admin online')
+        res.render('adminPost', {current_post: current_post})
+    }
+    else if (req.session.authenticated == false) {
+        console.log('not admin')
+        res.render('post', {current_post: current_post})
+    }
 })
 
 // Deletes post at specified ID
 app.get('/delete/:id', (req,res) => {
-    let id = req.params['id']
-    let index = id - 1
+    if (req.session.authenticated == true) {
+        console.log('admin online')
+        let id = req.params['id']
+        let index = id - 1
 
-    let del_query = "DELETE * FROM TABLE posts WHERE id = ?"
-    let sql_del = mysql.format(del_query, [id])
+        let del_query = "DELETE * FROM TABLE posts WHERE id = ?"
+        let sql_del = mysql.format(del_query, [id])
 
-    // Deletes post from the db
-    db.query(sql_del, (err, result) => {
-        if (err) throw err;
-        console.log(`Post ${id} deleted from database`)
-    })
+        // Deletes post from the db
+        db.query(sql_del, (err, result) => {
+            if (err) throw err;
+            console.log(`Post ${id} deleted from database`)
+        })
     
-    // Deletes post from the posts array
-    posts.splice(index, 1)
-    console.log(`Post ${id} deleted from the array`)
-    current_post = []
+        // Deletes post from the posts array
+        posts.splice(index, 1)
+        console.log(`Post ${id} deleted from the array`)
+        current_post = []
 
-    res.redirect('/')
+        res.redirect('/')
+    }
+    else if (req.session.authenticated == false) {
+        console.log('not admin')
+        res.redirect('/')
+    }
 })
 
 // Renders page where you can edit the post
 app.get('/edit/:id', (req,res) => {
-    res.render('edit', {current_post: current_post})
+    if (req.session.authenticated == true) {
+        console.log('admin online')
+        res.render('edit', {current_post: current_post})
+    }
+    else if (req.session.authenticated == false) {
+        console.log('not admin')
+        res.redirect('/')
+    }
 })
 
 // Posts the edit to the post
