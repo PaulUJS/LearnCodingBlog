@@ -119,7 +119,7 @@ app.post('/signup', async (req,res) => {
     const saltRounds = 10;
     const hashedPass = await bcrypt.hash(password, saltRounds);
 
-    const select_query = "SELECT FROM user where email = ?"
+    const select_query = "SELECT * FROM user where email = ?"
     const sql_select = mysql.format(select_query, [email])
 
     const insert_query = "INSERT INTO user VALUES (0,?,?)";
@@ -143,15 +143,15 @@ app.post('/signup', async (req,res) => {
 })
 
 // Lets me sign in to make, edit, and delete posts
-app.get('login', (req,res) => {
+app.get('/login', (req,res) => {
     res.render('login')
 })
 
-app.post('login', (req,res) => {
+app.post('/login', (req,res) => {
     const email = req.body.email
     const password = req.body.password
 
-    const sql_select = "SELECT * FROM users WHERE email = ?"
+    const sql_select = "SELECT * FROM user WHERE email = ?"
     const select_query = mysql.format(sql_select, [email])
     const session = req.session
 
@@ -159,17 +159,22 @@ app.post('login', (req,res) => {
         if (err) throw err;
         if (result.length == 0) {
            console.log('No user')
+           res.redirect('/')
         }
         else {
             const hashedPass = result[0].password
 
             if (await bcrypt.compare(password, hashedPass) == true) {
+                console.log('user authenticated')
                 session.userid = email;
                 session.authenticated = true
+                res.redirect('/')
             }
 
             else if (await bcrypt.compare(password, hashedPass) == false){
+                console.log('password wrong')
                 session.authenticated = false
+                res.redirect('/')
             }
         }
     })
@@ -178,7 +183,7 @@ app.post('login', (req,res) => {
 // Logs user out
 app.get('/logout', (req,res) => {
     req.session.destroy()
-    console.log('User logged out')
+    console.log('Admin logged out')
     res.redirect('/')
 })
 
