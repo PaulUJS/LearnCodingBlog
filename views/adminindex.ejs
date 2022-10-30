@@ -12,7 +12,7 @@
         <div class="nav-container">
             <div class="create">
                 <form action="/create" method="GET" class="create-form">
-                    <button name="create-btn">Create Post</button>
+                    <button class="create-btn">Create Post</button>
                 </form>
             </div>
             <div class="log-out">
@@ -28,7 +28,7 @@
         <div class="main-container">
             <% posts.forEach(element => { %>
             <div class="posts">
-                <form action="/post" method="GET" type="submit" class="posts-form">
+                <form action="/post" type="submit" class="posts-form">
                     <div class="title">
                     <p name="id-p">Blog <%= element.id %></p>
                     <p name="title-p"><%= element.title %></p>

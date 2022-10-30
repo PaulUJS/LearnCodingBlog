@@ -70,7 +70,7 @@ app.use(
 
 // Grabs all posts from database
 function allPosts() {
-    const select_query = "SELECT FROM TABLE posts TITLE, CONTENT"
+    const select_query = "SELECT * FROM posts "
     const sql_select = mysql.format(select_query)
     
     // Query for grabbing all posts
@@ -95,6 +95,9 @@ function allPosts() {
 
 // Renders the landing page
 app.get('/', (req,res) => {
+    console.log('getting posts')
+    allPosts()
+    console.log('posts retrieved')
     if (req.session.authenticated == true) {
         res.render('adminindex', {posts: posts})
         console.log('admin online')
@@ -187,24 +190,6 @@ app.get('/logout', (req,res) => {
     res.redirect('/')
 })
 
-// Creates post and pushes it to main page
-app.post('/create', (req,res) => {
-    let title = req.body.title
-    let content = req.body.content 
-
-    const insert_query = "INSERT INTO posts title = ?, content = ?"
-    const sql_insert = mysql.format(insert_query, [title], [content])
-
-    // Inserts the created post into the database
-    db.query(sql_insert, (err, result) => {
-        if (err) throw err;
-        console.log(result)
-        console.log('Post created')
-    })
-
-    res.redirect('/')
-})
-
 // Renders the page where the user creates posts
 app.get('/create', (req,res) => {
     if (req.session.authenticated == true) {
@@ -215,6 +200,24 @@ app.get('/create', (req,res) => {
         console.log('not admin')
         res.redirect('/')
     }
+})
+
+// Creates post and pushes it to main page
+app.post('/create', (req,res) => {
+    let title = req.body.title
+    let content = req.body.content 
+
+    const insert_query = "INSERT INTO posts (title, content) VALUES (?, ?)"
+    const sql_insert = mysql.format(insert_query, [title, content])
+
+    // Inserts the created post into the database
+    db.query(sql_insert, (err, result) => {
+        if (err) throw err;
+        console.log(result)
+        console.log('Post created')
+    })
+
+    res.redirect('/')
 })
 
 // Grabs post at secified ID then pushes it into the current post array

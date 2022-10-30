@@ -13,16 +13,16 @@
             <div class="main-container">
                 <div class="title">
                     <label for="title">Title</label>
-                    <input type="text" name="title" required>
+                    <input type="text" name="title" id="title" required>
                 </div>
                 <div class="content">
                     <label for="content">Content</label>
-                    <textarea name="content" rows="6" maxlength="5000" required></textarea>
+                    <textarea name="content" id="content" rows="6" maxlength="5000" required></textarea>
                 </div>
                 <div class="create">
-                    <a href="">
+                    <form action="/create" method="POST" class="create-form">
                         <button class="create-btn">Create Post</button>
-                    </a>
+                    </form>
                 </div>
             </div>
         </div>

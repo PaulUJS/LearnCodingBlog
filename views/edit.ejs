@@ -23,10 +23,10 @@
                     <label for="content">Content</label>
                     <textarea name="content" rows="6" maxlength="5000" value="<%= element.content %>" required></textarea>
                 </div>
-                <div class="create">
-                    <a href="">
-                        <button class="create-btn">Create Post</button>
-                    </a>
+                <div class="edit">
+                    <form action="/edit" method="GET" class="edit-form">
+                        <button class="edit-btn">Create Post</button>
+                    </form>
                 </div>
                 <% }) %>
             </div>
