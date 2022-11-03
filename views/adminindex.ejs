@@ -11,38 +11,35 @@
     
     <div class="nav">
         <div class="sidenav">
-            <div class="create">
-                <form action="/create" method="GET" class="create-form">
-                    <p>Create Post</p>
-                </form>
-            </div>
-            <div class="log-out">
-                <form action="/logout" method="GET" class="logout-form">
-                    <p>Log Out</p>
-                </form>
+            <form action="create" method="get" class="create-form">
+                <div class="create">
+                    <p><a href="create">Create Post</a></p>
+                </div>
+            </form>
+            <div class="logout">
+                <p><a href="logout">Log Out</a></p>
             </div>
         </div>
     </div>
-    <hr>
 
     <div class="main">
         <div class="main-container">
             <% posts.forEach(element => { %>
-            <div class="posts">
-                <form action="/post" type="submit" class="posts-form">
+            <form action="/post" method="get" class="posts-form">
+                <div class="posts">
                     <div class="title">
-                    <p name="id-p">Blog <%= element.id %></p>
-                    <p name="title-p"><%= element.title %></p>
+                        <p name="id-p">Blog <%= element.id %></p>
+                        <p name="title-p"><%= element.title %></p>
                     </div>
                     <div class="content">
-                    <p name="content-p"> <%= element.content %></p>
+                        <p name="content-p"> <%= element.content %></p>
                     </div>
-                </form>
-            </div>
+                </div>
+            </form>
             <% }) %>
         </div>
     </div>
     
-    <script src="main.js" type="script/javascript"></script>
+    <script src="/main.js" type="script/javascript"></script>
 </body>
 </html>

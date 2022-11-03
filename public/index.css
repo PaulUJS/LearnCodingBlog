@@ -4,6 +4,7 @@
 }
 
 body {
+    position: fixed;
     height: 100%;
 }
 
@@ -14,7 +15,6 @@ body {
     display: flex;
     justify-content:center;
     align-items: center;
-    overflow: scroll;
 }
 
 .main-container {
@@ -22,13 +22,13 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    overflow: scroll;
+    overflow-y: visible;
     height: 100%;
     width: 100%;
 }
 
 .nav {
-    position: fixed;
+    position: static;
     height: 100%;
     width: fit-content;
 }
@@ -37,7 +37,7 @@ body {
     position: inherit;
     height: 100%;
     width: fit-content;
-    background-color: #111; 
+    background-color: #111;
 }
 
 
@@ -56,4 +56,3 @@ body {
     font: 18px;
     font-family: 'Roboto', sans-serif;
 }
-

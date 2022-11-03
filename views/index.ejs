@@ -20,17 +20,17 @@
     <div class="main">
         <div class="main-container">
             <% posts.forEach(element => { %>
-            <div class="posts">
-                <form action="/post" method="GET" type="submit" class="posts-form">
+            <form action="/post" method="get" class="posts-form">
+                <div class="posts">
                     <div class="title">
-                    <p name="id">Blog <%= element.id %></p>
-                    <p name="title"><%= element.title %></p>
+                        <p name="id-p">Blog <%= element.id %></p>
+                        <p name="title-p"><%= element.title %></p>
                     </div>
-                    <div class="blog-content">
-                    <p name="content"> <%= element.content %></p>
+                    <div class="content">
+                        <p name="content-p"> <%= element.content %></p>
                     </div>
-                </form>
-            </div>
+                </div>
+            </form>
             <% }) %>
         </div>
     </div>
