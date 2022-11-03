@@ -14,6 +14,7 @@ body {
     display: flex;
     justify-content:center;
     align-items: center;
+    overflow: scroll;
 }
 
 .main-container {
@@ -21,6 +22,7 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
+    overflow: scroll;
     height: 100%;
     width: 100%;
 }
@@ -48,5 +50,10 @@ body {
 
 .posts {
     overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font: 18px;
+    font-family: 'Roboto', sans-serif;
 }
 

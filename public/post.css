@@ -1,0 +1,36 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+}
+
+body {
+    height: 100%;
+}
+
+.main {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    display: flex;
+    justify-content:center;
+    align-items: center;
+    overflow: scroll;
+}
+
+.main-container {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    width: 100%;
+    overflow: scroll;
+}
+
+.posts {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font: 18px;
+    font-family: 'Roboto', sans-serif;
+}
