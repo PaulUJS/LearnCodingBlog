@@ -14,7 +14,6 @@ body {
     display: flex;
     justify-content:center;
     align-items: center;
-    overflow: scroll;
 }
 
 .main-container {
@@ -24,7 +23,7 @@ body {
     justify-content: center;
     height: 100%;
     width: 100%;
-    overflow: scroll;
+    overflow-y: visible;
 }
 
 .posts {
@@ -33,4 +32,18 @@ body {
     justify-content: center;
     font: 18px;
     font-family: 'Roboto', sans-serif;
+}
+
+.edit-btn {
+    border-radius: 10px;
+    height: 50px;
+    width: 100px;
+    background-color: white;
+}
+
+.delete-btn {
+    border-radius: 10px;
+    height: 50px;
+    width: 100px;
+    background-color: white;
 }
