@@ -8,30 +8,32 @@
     <link rel="stylesheet" href="index.css">
 </head>
 <body>
-    <section id="dashboard">
-        <header class="header">
-            <h1>LearnCodingBlog</h1>
-        </header>
-        <main class="content">
-            <div class="main">
-                <div class="main-container">
-                    <% posts.forEach(element => { %>
-                    <div class="posts">
-                        <form action="/post" method="GET" type="submit" class="posts-form">
-                            <div class="title">
-                            <p name="id">Blog <%= element.id %></p>
-                            <p name="title"><%= element.title %></p>
-                            </div>
-                            <div class="blog-content">
-                            <p name="content"> <%= element.content %></p>
-                            </div>
-                        </form>
-                    </div>
-                    <% }) %>
+    <div class="nav">
+        <div class="sidenav">
+            <p>LearnCodingBlog</p>
+            <p>hi</p>
+            <p>hi</p>
+        </div>
+    </div>
+    <main>
+        <div class="main">
+            <div class="main-container">
+                <% posts.forEach(element => { %>
+                <div class="posts">
+                    <form action="/post" method="GET" type="submit" class="posts-form">
+                        <div class="title">
+                        <p name="id">Blog <%= element.id %></p>
+                        <p name="title"><%= element.title %></p>
+                        </div>
+                        <div class="blog-content">
+                        <p name="content"> <%= element.content %></p>
+                        </div>
+                    </form>
                 </div>
+                <% }) %>
             </div>
-        </main>
-    </section>
+        </div>
+    </main>
     <script src="main.js" type="script/javascript"></script>
 </body>
 </html>

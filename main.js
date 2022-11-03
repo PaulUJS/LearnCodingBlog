@@ -7,7 +7,9 @@ const { totalmem, devNull } = require('os')
 const bcrypt = require('bcrypt')
 const session = require("express-session")
 const store = new session.MemoryStore()
-const cookieParser = require("cookie-parser");
+const cookieParser = require("cookie-parser")
+const { dirname } = require("path")
+const path = require("path")
 require('dotenv').config()
 
 //
@@ -49,6 +51,10 @@ app.use(express.urlencoded({ extended: true }));
 
 // Parses cookies
 app.use(cookieParser());
+
+// Makes the css and html files accessable
+app.use(express.static(path.join(__dirname, "/views")));
+app.use(express.static(path.join(__dirname, "/public")));
 
 // View engine for rendering dynamic html pages
 app.set('view engine', 'ejs')
