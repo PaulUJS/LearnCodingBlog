@@ -9,28 +9,28 @@
 </head>
 <body>
 
-        <div class="main">
-            <div class="main-container">
-                <div class="title">
+    <div class="main">
+        <div class="main-container">
+            <form action="/create" method="POST" class="create-form">
+                <div class="label">
                     <label for="title">Title</label>
                 </div>
                 <div>
                     <input type="text" class="title_input" name="title" id="title" required>
                 </div>
-                <div class="content">
+                <div class="label">
                     <label for="content">Content</label>
                 </div>
                 <div>
-                    <textarea name="content" class="content_input" id="content" rows="6" maxlength="5000" required></textarea>
+                    <textarea name="content" class="content_input" id="content" rows="15" cols="15" maxlength="5000" required style="height: 604px; width: 941px;"></textarea>
                 </div>
                 <div class="create">
-                    <form action="/create" method="POST" class="create-form">
-                        <button class="create-btn">Create Post</button>
-                    </form>
+                    <button class="create-btn">Create Post</button>
                 </div>
-            </div>
+            </form>
         </div>
+    </div>
 
-    <script src="/main.js" type="script/javascript"></script>
+    <script src="main.js" type="script/javascript"></script>
 </body>
 </html>

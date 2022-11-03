@@ -6,35 +6,36 @@
 body {
     position: fixed;
     height: 100%;
+    width: 100%;
 }
 
 .main {
-    position: absolute;
+    position: relative;
     height: 100%;
     width: 100%;
     display: flex;
     justify-content:center;
+    overflow-y: visible;
     align-items: center;
 }
 
 .main-container {
-    position: absolute;
+    position: inherit;
     display: flex;
     align-items: center;
     justify-content: center;
-    overflow-y: visible;
     height: 100%;
     width: 100%;
 }
 
 .nav {
-    position: static;
+    position: absolute;
     height: 100%;
     width: fit-content;
 }
 
 .sidenav {
-    position: inherit;
+    position: static;
     height: 100%;
     width: fit-content;
     background-color: #111;
@@ -49,7 +50,6 @@ body {
 }
 
 .posts {
-    overflow: hidden;
     display: flex;
     align-items: center;
     justify-content: center;
