@@ -77,7 +77,7 @@ app.use(
 function allPosts() {
     const select_query = "SELECT * FROM posts "
     const sql_select = mysql.format(select_query)
-    
+
     // Query for grabbing all posts
     db.query(sql_select, (err, result) => {
         if (err) throw err;
@@ -96,18 +96,24 @@ function allPosts() {
                 content: content
             })
         }
+        finished = true
         console.log(posts)
     })
 }
 
+// Updates the posts array everytime the script is run
+function main() {
+    posts = []
+    current_post = []
+    allPosts()
+    console.log('main')
+}
+
+// Calls main function
+main()
+
 // Renders the landing page
 app.get('/', async (req,res) => {
-    console.log('getting posts')
-    await new Promise((resolve, reject) => {
-        allPosts()
-        resolve('prom resolved')
-    })
-    console.log('posts retrieved')
     if (req.session.authenticated == true) {
         res.render('adminindex', {posts: posts})
         console.log('admin online')
@@ -225,6 +231,7 @@ app.post('/create', (req,res) => {
         if (err) throw err;
         console.log(result)
         console.log('Post created')
+        main()
     })
 
     res.redirect('/')
@@ -273,7 +280,7 @@ app.get('/delete/:id', (req,res) => {
         posts.splice(index, 1)
         console.log(`Post ${id} deleted from the array`)
         current_post = []
-
+        main()
         res.redirect('/')
     }
     else if (req.session.authenticated == false) {
@@ -307,7 +314,7 @@ app.post('/edit/:id', (req,res) => {
     change['title'] = title
     change['content'] = content
     current_post = []
-
+    main()
     res.redirect('/')
 })
 
