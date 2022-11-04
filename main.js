@@ -238,15 +238,26 @@ app.post('/create', (req,res) => {
 })
 
 // Grabs post at secified ID then pushes it into the current post array
-app.get('/post', (req,res) => {
+app.get('/seePost/:id', (req,res) => {
+    console.log('at post')
     // Grabs ID parameter from the url
-    let id = req.body.id
-    // Gets index of that post based off its ID
-    let index = id - 1
-    // Pushes that post object into the current post array
-    current_post.push(posts[index])
+    let id = req.params['id']
+    //  ID param is an object so this gets the value of the object, returning the ID
+    let i = Object.values(id);
+    posts.forEach((x) => {
+        // Checks which reminder i(the chosen reminders ID) is equal to
+        if (i == JSON.stringify(x["id"])) {
+            // Once the reminder is found in user_reminders the data is pushed into the current_reminder array as an object
+            current_post.push({
+                title: x['title'],
+                content: x['content'],
+                id: i
+            });
+        }
+    })
     res.redirect(`/post/${id}`)
-})
+});
+
 
 // Renders the post that was grabbed in the previous get request
 app.get('/post/:id', (req,res) => {
@@ -254,10 +265,11 @@ app.get('/post/:id', (req,res) => {
         console.log('admin online')
         res.render('adminPost', {current_post: current_post})
     }
-    else if (req.session.authenticated == false) {
+    else {
         console.log('not admin')
         res.render('post', {current_post: current_post})
     }
+   
 })
 
 // Deletes post at specified ID
@@ -265,7 +277,7 @@ app.get('/delete/:id', (req,res) => {
     if (req.session.authenticated == true) {
         console.log('admin online')
         let id = req.params['id']
-        let index = id - 1
+        let index = parseInt(id) - 1
 
         let del_query = "DELETE * FROM TABLE posts WHERE id = ?"
         let sql_del = mysql.format(del_query, [id])
