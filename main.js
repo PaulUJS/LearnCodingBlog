@@ -325,7 +325,6 @@ app.post('/edit/:id', (req,res) => {
     // Changes the title and content to the edited version
     change['title'] = title
     change['content'] = content
-    current_post = []
     main()
     res.redirect('/')
 })
