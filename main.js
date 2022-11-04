@@ -73,7 +73,6 @@ app.use(
     })
 );
 
-
 // Grabs all posts from database
 function allPosts() {
     const select_query = "SELECT * FROM posts "
@@ -82,27 +81,32 @@ function allPosts() {
     // Query for grabbing all posts
     db.query(sql_select, (err, result) => {
         if (err) throw err;
-        console.log(result.length)
+        console.log(result[0].title)
 
         // Loops through the posts from db
-        for (let x = 0; x > result.length; x++) {
+        for (let x = 0; x < result.length; x++) {
             let title = result[x].title;
             let content = result[x].content;
+            let id = result[x].id;
 
             // Pushes posts into an array as an object which will be rendered in html
             posts.push({
+                id: id,
                 title: title,
                 content: content
             })
-            console.log(posts)
         }
+        console.log(posts)
     })
 }
 
 // Renders the landing page
-app.get('/', (req,res) => {
+app.get('/', async (req,res) => {
     console.log('getting posts')
-    allPosts()
+    await new Promise((resolve, reject) => {
+        allPosts()
+        resolve('prom resolved')
+    })
     console.log('posts retrieved')
     if (req.session.authenticated == true) {
         res.render('adminindex', {posts: posts})
@@ -199,7 +203,7 @@ app.get('/logout', (req,res) => {
 // Renders the page where the user creates posts
 app.get('/create', (req,res) => {
     if (req.session.authenticated == true) {
-        console.log('admin online')
+        console.log('admin authenticated')
         res.render('create')
     }
     else if (req.session.authenticated == false) {
